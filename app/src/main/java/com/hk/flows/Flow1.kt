@@ -4,10 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.hk.flows.databinding.ActivityFlow1Binding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class Flow1 : AppCompatActivity() {
     val TAG = "Flow1"
@@ -36,12 +34,25 @@ class Flow1 : AppCompatActivity() {
                 }
             }
         }
+
+        dataBinding.cancelNormalFlow.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                withTimeoutOrNull(2000, {
+                    flow.collect { t ->
+                        println("$TAG - $t")
+                    }
+                })
+            }
+        }
+
+
     }
 
     private fun setUpFlow() {
         flow = flow {
             for(i in 1..6) {
                 emit(i)
+                delay(3000)
             }
         }.flowOn(Dispatchers.IO)
     }
