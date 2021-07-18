@@ -21,7 +21,7 @@ class Flow1 : AppCompatActivity() {
         setUpFlowOf()
         dataBinding.normalFlow.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                flow.collect { t ->
+                flow.filter { it % 2 == 0 }.map { it * it * it }.collect { t ->
                     println("$TAG - $t")
                 }
             }
@@ -52,9 +52,8 @@ class Flow1 : AppCompatActivity() {
         flow = flow {
             for(i in 1..6) {
                 emit(i)
-                delay(3000)
             }
-        }.flowOn(Dispatchers.IO)
+        }
     }
 
 
