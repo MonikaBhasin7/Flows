@@ -67,6 +67,15 @@
             app:layout_constraintEnd_toEndOf="@+id/with_transform_operatpr"
             app:layout_constraintStart_toStartOf="@+id/with_transform_operatpr"
             app:layout_constraintTop_toBottomOf="@+id/with_transform_operatpr" />
+
+        <Button
+            android:id="@+id/flow_with_buffer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flow Using Buffers"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flow_on" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

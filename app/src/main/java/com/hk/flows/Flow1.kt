@@ -64,6 +64,12 @@ class Flow1 : AppCompatActivity() {
                 flowUsingFlowOn()
             }
         }
+
+        dataBinding.flowWithBuffer.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                flowUsingBuffer()
+            }
+        }
     }
 
     private fun setUpFlow() =
@@ -136,5 +142,24 @@ class Flow1 : AppCompatActivity() {
                 println("flowUsingFlowOn collect-$it")
                 println("flowUsingFlowOn collect-${Thread.currentThread().name}")
             }
+    }
+
+    /**
+     * As flows are sequential, it means jab tak collect ka lambda fun execute nahi ho jaata flow ka lambda fun suspend ho jaata hai and next emit nahi kar paata jab tak collect
+     * ke lambda fun ki puri execution naa ho jaaye.
+     * But In case of buffer, it internally use the channels. It uses buffer, in which the emitter emit the data without waiting for collector lambda fun to complete.
+     * Same as channels.
+     */
+    @ExperimentalCoroutinesApi
+    private suspend fun flowUsingBuffer() {
+        flow<Int> {
+            (1..10).forEach {
+                println("flowUsingBuffer emit-$it")
+                emit(it)
+            }
+        }.buffer(2).collect {
+            delay(2000)
+            println("flowUsingBuffer collect-$it")
+        }
     }
 }
