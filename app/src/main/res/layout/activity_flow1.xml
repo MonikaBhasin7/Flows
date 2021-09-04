@@ -38,6 +38,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/flow_of" />
+
+        <Button
+            android:id="@+id/with_intermediate_operators"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Intermediate Operators"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cancel_normal_flow" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
