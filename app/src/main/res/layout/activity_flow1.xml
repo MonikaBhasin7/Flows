@@ -48,6 +48,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cancel_normal_flow" />
+
+        <Button
+            android:id="@+id/with_transform_operatpr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TransformOperator"
+            app:layout_constraintEnd_toEndOf="@+id/with_intermediate_operators"
+            app:layout_constraintStart_toStartOf="@+id/with_intermediate_operators"
+            app:layout_constraintTop_toBottomOf="@+id/with_intermediate_operators" />
+
+        <Button
+            android:id="@+id/flow_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="Flow On"
+            app:layout_constraintEnd_toEndOf="@+id/with_transform_operatpr"
+            app:layout_constraintStart_toStartOf="@+id/with_transform_operatpr"
+            app:layout_constraintTop_toBottomOf="@+id/with_transform_operatpr" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
