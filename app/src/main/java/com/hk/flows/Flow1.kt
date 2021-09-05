@@ -1,11 +1,16 @@
 package com.hk.flows
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
+import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.hk.flows.databinding.ActivityFlow1Binding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+
 
 class Flow1 : AppCompatActivity() {
     val TAG = "Flow1"
@@ -16,7 +21,7 @@ class Flow1 : AppCompatActivity() {
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataBinding = DataBindingUtil.setContentView(this,  R.layout.activity_flow1)
+        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_flow1)
 
         CoroutineScope(Dispatchers.IO).launch {
             setUpFlow().filter { it % 2 == 0 }.map { it * it * it }.collect { t ->
@@ -70,6 +75,22 @@ class Flow1 : AppCompatActivity() {
                 flowUsingBuffer()
             }
         }
+
+        dataBinding.withConflateOperator.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                flowUsingConflate()
+            }
+        }
+
+        dataBinding.withCollectLatest.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                flowUsingCollectLatest()
+            }
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            searchFunctionality()
+        }
     }
 
     private fun setUpFlow() =
@@ -113,7 +134,7 @@ class Flow1 : AppCompatActivity() {
     private suspend fun flowWithTransformOperator() {
         (1..3).asFlow()
             .transform { request ->
-                emit(request*2)
+                emit(request * 2)
             }
             .collect {
                 println("collect flowWithTransformOperator-$it")
@@ -162,4 +183,77 @@ class Flow1 : AppCompatActivity() {
             println("flowUsingBuffer collect-$it")
         }
     }
+
+    /**
+     * If a collection started processing an emission, it continues until completion. When collector is available to work, if there are more
+     * than one emission which does not started to process in collector, only the latest emission processed, The old emissions which has not collected yet are dropped.
+     */
+    @ExperimentalCoroutinesApi
+    private suspend fun flowUsingConflate() {
+        flow<Int> {
+            (1..10).forEach {
+                println("flowUsingConflate emit-$it")
+                emit(it)
+            }
+        }.conflate().collect {
+            delay(2000)
+            println("flowUsingConflate collect-$it")
+        }
+    }
+
+    /**
+     * Assume that a collection started processing an emission. Before completion of the processing of the emission,
+     * if a new emission occurs, collector cancels the processing of current work, collects the latest value, and
+     * starts to process it.
+     */
+    @ExperimentalCoroutinesApi
+    private suspend fun flowUsingCollectLatest() {
+        flow<Int> {
+            (1..10).forEach {
+                println("flowUsingCollectLatest emit-$it")
+                emit(it)
+            }
+        }.collectLatest {
+            delay(2000)
+            println("flowUsingCollectLatest collect-$it")
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    suspend fun searchFunctionality() {
+        dataBinding.etSearchUsingFlow.getQueryTextChangeStateFlow().flatMapLatest {
+            doWork(it).catch {
+                emit("error while getting data.")
+            }
+        }.collect {
+            println("collect ${it}")
+        }
+    }
+
+    private suspend fun doWork(it: String): Flow<String> {
+        return flow<String> {
+            delay(2000)
+            emit("$it - response")
+        }
+    }
+
+}
+
+@ExperimentalCoroutinesApi
+fun EditText.getQueryTextChangeStateFlow(): StateFlow<String> {
+
+    val query = MutableStateFlow("")
+
+    addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            query.value = s.toString()
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+        }
+    })
+    return query
 }
