@@ -112,6 +112,26 @@
                 android:layout_height="wrap_content"
                 android:hint="Search Using Flow" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/with_flatMapConcat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Flat Map Concat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_search_using_flow" />
+
+        <Button
+            android:id="@+id/with_flatMapLatest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Flat Map Latest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/with_flatMapConcat" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

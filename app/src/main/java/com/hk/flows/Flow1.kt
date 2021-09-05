@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.hk.flows.databinding.ActivityFlow1Binding
@@ -18,6 +17,7 @@ class Flow1 : AppCompatActivity() {
     var flow: Flow<Int> = flow {  }
     lateinit var flowOf: Flow<Int>
     lateinit var dataBinding: ActivityFlow1Binding
+    @FlowPreview
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +85,18 @@ class Flow1 : AppCompatActivity() {
         dataBinding.withCollectLatest.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 flowUsingCollectLatest()
+            }
+        }
+
+        dataBinding.withFlatMapConcat.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                flowUsingFlatMapConcat()
+            }
+        }
+
+        dataBinding.withFlatMapLatest.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                flowUsingFlatMapLatest()
             }
         }
 
@@ -237,6 +249,71 @@ class Flow1 : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * There are two flows here. The outer flow executes and emit a value, now it waits for the inner flow to emit its values. Actually, the thing is, the outer flow emit
+     * the value, flatMapConcat takes the value that is emitted by the outer flow. The flatMapConcat operator executes its lambda and emit the value, now
+     * the collector collect the value and now flatMapConcat executes its suspended lambda jab tak puri definition kahatam nahi ho jaati. Now, the outer lambda emit the next value
+     * this flow will work like this.
+     *
+     * Nested loop(We can say this.)
+     *
+     * collect - 4
+     * collect - 5
+     * collect - 8
+     * collect - 10
+     * collect - 12
+     * collect - 15
+     */
+    @FlowPreview
+    private suspend fun flowUsingFlatMapConcat() {
+        flow<Int> {
+            (1..3).forEach {
+                emit(it)
+            }
+        }.flatMapConcat {
+            innerFlowOfMapConcat(it)
+        }.collect {
+            println("collect - $it")
+        }
+    }
+
+    private suspend fun innerFlowOfMapConcat(it: Int) : Flow<Int> {
+        return flow {
+            emit(it*4)
+            emit(it*5)
+        }
+    }
+
+    /**
+     * collect - 4
+     * collect - 8
+     * collect - 12
+     * collect - 15
+     * outer flow does not wait for the inner flow to complete before starting to emit the next value.
+     * At each emission, the processing of old emissions are cancelled. Only the last emission continues execution.
+     */
+    @FlowPreview
+    private suspend fun flowUsingFlatMapLatest() {
+        flow<Int> {
+            (1..3).forEach {
+                delay(1000)
+                emit(it)
+            }
+        }.flatMapLatest {
+            innerFlowOfMapLatest(it)
+        }.collect {
+            println("collect - $it")
+        }
+    }
+
+    private suspend fun innerFlowOfMapLatest(it: Int) : Flow<Int> {
+        return flow {
+            emit(it*4)
+            delay(2000)
+            emit(it*5)
+        }
+    }
 }
 
 @ExperimentalCoroutinesApi
