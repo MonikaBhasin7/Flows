@@ -3,135 +3,174 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Flow1">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/normal_flow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Normal Flow"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/flow_of"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="flowOf"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/normal_flow" />
-
-        <Button
-            android:id="@+id/cancel_normal_flow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Cancel Normal Flow"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flow_of" />
-
-        <Button
-            android:id="@+id/with_intermediate_operators"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Intermediate Operators"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cancel_normal_flow" />
-
-        <Button
-            android:id="@+id/with_transform_operatpr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TransformOperator"
-            app:layout_constraintEnd_toEndOf="@+id/with_intermediate_operators"
-            app:layout_constraintStart_toStartOf="@+id/with_intermediate_operators"
-            app:layout_constraintTop_toBottomOf="@+id/with_intermediate_operators" />
-
-        <Button
-            android:id="@+id/flow_on"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:text="Flow On"
-            app:layout_constraintEnd_toEndOf="@+id/with_transform_operatpr"
-            app:layout_constraintStart_toStartOf="@+id/with_transform_operatpr"
-            app:layout_constraintTop_toBottomOf="@+id/with_transform_operatpr" />
-
-        <Button
-            android:id="@+id/flow_with_buffer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Flow Using Buffers"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flow_on" />
-
-        <Button
-            android:id="@+id/with_conflate_operator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Flow using conflate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flow_with_buffer" />
-
-        <Button
-            android:id="@+id/with_collect_latest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Flow using collectLatest"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/with_conflate_operator" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_search_using_flow"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/with_collect_latest"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_height="match_parent"
+            tools:context=".Flow1">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_search_using_flow"
+            <Button
+                android:id="@+id/normal_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Normal Flow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/flow_of"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="flowOf"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/normal_flow" />
+
+            <Button
+                android:id="@+id/cancel_normal_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Cancel Normal Flow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/flow_of" />
+
+            <Button
+                android:id="@+id/with_intermediate_operators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Intermediate Operators"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cancel_normal_flow" />
+
+            <Button
+                android:id="@+id/with_transform_operatpr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TransformOperator"
+                app:layout_constraintEnd_toEndOf="@+id/with_intermediate_operators"
+                app:layout_constraintStart_toStartOf="@+id/with_intermediate_operators"
+                app:layout_constraintTop_toBottomOf="@+id/with_intermediate_operators" />
+
+            <Button
+                android:id="@+id/flow_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="Flow On"
+                app:layout_constraintEnd_toEndOf="@+id/with_transform_operatpr"
+                app:layout_constraintStart_toStartOf="@+id/with_transform_operatpr"
+                app:layout_constraintTop_toBottomOf="@+id/with_transform_operatpr" />
+
+            <Button
+                android:id="@+id/flow_with_buffer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flow Using Buffers"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/flow_on" />
+
+            <Button
+                android:id="@+id/with_conflate_operator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Flow using conflate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/flow_with_buffer" />
+
+            <Button
+                android:id="@+id/with_collect_latest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flow using collectLatest"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.554"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/with_conflate_operator" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_search_using_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search Using Flow" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/with_collect_latest"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="10dp"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/with_flatMapConcat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Flat Map Concat"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_search_using_flow" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_search_using_flow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Search Using Flow" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/with_flatMapLatest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Flat Map Latest"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/with_flatMapConcat" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/with_flatMapConcat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Flat Map Concat"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/til_search_using_flow" />
+
+            <Button
+                android:id="@+id/with_flatMapLatest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Flat Map Latest"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/with_flatMapConcat" />
+
+            <Button
+                android:id="@+id/combine_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Combine Flow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/with_flatMapLatest" />
+
+
+            <Button
+                android:id="@+id/flow_firstStep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Flow First Step"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/combine_flow" />
+
+            <Button
+                android:id="@+id/flow_check_behaviour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Check Behaviour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/flow_firstStep" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
 
 </layout>

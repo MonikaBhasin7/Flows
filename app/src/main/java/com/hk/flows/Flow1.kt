@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.hk.flows.databinding.ActivityFlow1Binding
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
 
@@ -78,7 +79,9 @@ class Flow1 : AppCompatActivity() {
 
         dataBinding.withConflateOperator.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                flowUsingConflate()
+                forTesting().collect {
+                    println("forTesting${it}")
+                }
             }
         }
 
@@ -95,14 +98,41 @@ class Flow1 : AppCompatActivity() {
         }
 
         dataBinding.withFlatMapLatest.setOnClickListener {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                flowUsingFlatMapLatest()
+//            }
+
+        }
+
+        dataBinding.combineFlow.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                flowUsingFlatMapLatest()
+                combineFlow()
+            }
+        }
+
+        dataBinding.flowFirstStep.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                flowFirstStep()
+            }
+        }
+
+        dataBinding.flowCheckBehaviour.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                a()
             }
         }
 
         CoroutineScope(Dispatchers.IO).launch {
             searchFunctionality()
         }
+    }
+
+    private fun forTesting() = flow {
+        withContext(Dispatchers.IO) {
+            emit(1)
+        }
+    }.flowOn(Dispatchers.IO).catch {
+
     }
 
     private fun setUpFlow() =
@@ -173,8 +203,15 @@ class Flow1 : AppCompatActivity() {
             .flowOn(Dispatchers.IO)
             .collect {
                 println("flowUsingFlowOn collect-$it")
+                delayFun()
                 println("flowUsingFlowOn collect-${Thread.currentThread().name}")
             }
+    }
+
+    fun delayFun() {
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(3000)
+        }
     }
 
     /**
@@ -272,9 +309,19 @@ class Flow1 : AppCompatActivity() {
                 emit(it)
             }
         }.flatMapConcat {
-            innerFlowOfMapConcat(it)
+            flow {
+                emit(it)
+            }
+//            returnSameValueOfOuterLambda(it)
+//            innerFlowOfMapConcat(it)
         }.collect {
             println("collect - $it")
+        }
+    }
+
+    private suspend fun returnSameValueOfOuterLambda(i: Int): Flow<Int> {
+        return flow {
+            emit(i)
         }
     }
 
@@ -313,6 +360,74 @@ class Flow1 : AppCompatActivity() {
             delay(2000)
             emit(it*5)
         }
+    }
+
+    private suspend fun combineFlow() {
+//        flowOf(1,2,3)
+//        val a = flow {
+//            delay(1000)
+//            emit(100)
+//            emit(1000)
+//        }
+//        val b = flow {
+//            //delay(2000)
+//            emit(200)
+//        }
+//        a.combine(b) { aInt, bInt ->
+//            "$aInt$bInt"
+//        }.collect {
+//            println(it)
+//        }
+        val numbersFlow = innerFlowOfMapLatest(1)
+        val lettersFlow = innerFlowOfMapLatest(1)
+        numbersFlow.combine(lettersFlow) { number, letter ->
+            "$number$letter"
+        }.collect {
+            println(it)
+        }
+    }
+
+    private suspend fun flowFirstStep() {
+        flow {
+            emit(1)
+            emit(2)
+        }.collectLatest {
+            println(it)
+            delay(3000)
+            println("collect complete")
+        }
+    }
+
+
+    private suspend fun a() {
+        println("a before")
+        h()
+        println("after h")
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            b().collect {
+                println("a inside")
+            }
+        }
+        job.join()
+        println("a after")
+    }
+
+    suspend fun h() {
+        println("inside h")
+    }
+
+
+    private suspend fun b(): Flow<String> = channelFlow {
+        delay(3000)
+        d {
+            offer("abd")
+            cancel()
+        }
+        awaitClose()
+    }
+
+    private fun d(callback : () -> (Unit)) {
+        callback()
     }
 }
 
